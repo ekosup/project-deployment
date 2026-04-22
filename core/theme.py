@@ -7,8 +7,8 @@ KEMENKEU_BG = "#F6F8FC"
 
 def setup_page() -> None:
     st.set_page_config(
-        page_title="Pelatihan Streamlit - Kemenkeu",
-        page_icon="🏛️",
+        page_title="Project Kemenkeu",
+        page_icon="🧠",
         layout="wide",
     )
 
