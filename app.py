@@ -9,8 +9,8 @@ apply_kemenkeu_theme()
 pages = [
     st.Page(beranda.render, title="Beranda", icon=":material/home:", url_path="beranda"),
     st.Page(dasar_widget.render, title="Dasar & Widget", icon=":material/widgets:", url_path="dasar-widget"),
-    st.Page(state_form_cache.render, title="State/Form/Cache", icon=":material/tune:", url_path="state-form-cache"),
     st.Page(mini_project.render, title="Mini Project", icon=":material/dashboard:", url_path="mini-project"),
+    st.Page(state_form_cache.render, title="State/Form/Cache", icon=":material/tune:", url_path="state-form-cache"),
     st.Page(endpoint_llm.render, title="Endpoint LLM", icon=":material/smart_toy:", url_path="endpoint-llm"),
     st.Page(deployment.render, title="Deployment", icon=":material/rocket_launch:", url_path="deployment"),
 ]
