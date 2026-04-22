@@ -13,7 +13,7 @@ def render() -> None:
     with col1:
         card_with_anchor(
             title="Apa itu Streamlit?",
-            content="Streamlit adalah framework open-source yang memungkinkan kamu membuat aplikasi web interaktif dengan cepat menggunakan Python. Cocok untuk data science, machine learning, dan prototyping aplikasi.",
+            content="Streamlit adalah framework open-source yang memungkinkan kamu membuat aplikasi web interaktif dengan cepat menggunakan Python.",
             anchor="https://streamlit.io/",
         )
 
@@ -28,6 +28,6 @@ def render() -> None:
     with col3:
         card_with_anchor(
             title="Galeri",
-            content="Publikasi aplikasi Streamlit yang dibuat oleh komunitas di seluruh dunia, sebagai inspirasi untuk proyekmu sendiri.",
+            content="Publikasi aplikasi Streamlit yang dibuat oleh komunitas di seluruh dunia, silakan gunakan sebagai inspirasi untuk proyekmu sendiri.",
             anchor="https://streamlit.io/gallery",
         )

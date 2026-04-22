@@ -1,8 +1,8 @@
-from ui.widgets import show_banner
+from ui.widgets import banner
 
 
 def render() -> None:
-    show_banner(
+    banner(
         "State, Form, dan Cache",
         "Berkenalan dengan konsep state management, penggunaan form untuk input terstruktur, dan caching untuk meningkatkan performa aplikasi Streamlit.",
     )

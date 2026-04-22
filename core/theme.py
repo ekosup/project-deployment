@@ -28,7 +28,7 @@ def apply_kemenkeu_theme() -> None:
             padding: 1rem 1.2rem;
             border-radius: 12px;
             color: white;
-            border-top: 6px solid {KEMENKEU_GOLD};
+            border-bottom: 2px solid {KEMENKEU_GOLD};
             margin-top: 1rem;
             margin-bottom: 1rem;
         }}
@@ -59,7 +59,7 @@ def apply_kemenkeu_theme() -> None:
             background: color-mix(in srgb, {KEMENKEU_GOLD} 14%, white);
             color: #7d5a00;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 500;
         }}
         .kemenkeu-link-btn:hover {{
             background: {KEMENKEU_GOLD};
