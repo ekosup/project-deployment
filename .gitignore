@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.pyo
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+
+# Secrets & env
+.env
+.env.*
+.streamlit/secrets.toml
+
+# OS/editor
+.DS_Store
+.vscode/

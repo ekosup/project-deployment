@@ -1,0 +1,9 @@
+[theme]
+# Kemenkeu-inspired palette
+primaryColor = "#0F2D6B"
+backgroundColor = "#F6F8FC"
+secondaryBackgroundColor = "#EAF0FB"
+textColor = "#1E2A3B"
+
+[server]
+runOnSave = true
