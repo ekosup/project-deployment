@@ -1,6 +1,7 @@
 from ui.widgets import banner
 import streamlit as st
 import pandas as pd
+import time
 
 
 @st.cache_data(ttl=20)
@@ -34,3 +35,16 @@ def render() -> None:
         "State dan Cache",
         "Berkenalan dengan konsep state management dan caching untuk meningkatkan performa aplikasi Streamlit.",
     )
+
+    _init_state()
+
+    st.write("Ini counter saat ini: ", st.session_state['state_demo_counter'])
+
+    if st.button('Tambah counter'):
+        st.session_state['state_demo_counter'] += 1
+    
+    
+    if st.button('Load data'):
+        data = _get_cached_dataset(100, 42)
+        st.write(data)
+    

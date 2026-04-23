@@ -1,5 +1,6 @@
 from ui.layouts import three_columns_layout
 from ui.widgets import banner, card_with_anchor
+import streamlit as st
 
 
 def render() -> None:
@@ -31,3 +32,7 @@ def render() -> None:
             content="Publikasi aplikasi Streamlit yang dibuat oleh komunitas di seluruh dunia, silakan gunakan sebagai inspirasi untuk proyekmu sendiri.",
             anchor="https://streamlit.io/gallery",
         )
+
+
+
+    
