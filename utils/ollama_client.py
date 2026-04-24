@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import requests
 
 
@@ -34,7 +35,7 @@ def list_models(host: str = DEFAULT_OLLAMA_HOST) -> list[str]:
     return names
 
 
-def generate_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60) -> str:
+def stream_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60):
     if not prompt.strip():
         raise OllamaError("Prompt tidak boleh kosong.")
 
@@ -45,11 +46,11 @@ def generate_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, time
     payload = {
         "model": model,
         "prompt": prompt,
-        "stream": False,
+        "stream": True,
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=timeout)
+        response = requests.post(url, json=payload, stream=True, timeout=timeout)
         response.raise_for_status()
     except requests.Timeout as exc:
         raise OllamaError("Request generate ke Ollama timeout.") from exc
@@ -59,11 +60,26 @@ def generate_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, time
             detail = f" - {exc.response.text}"
         raise OllamaError(f"Gagal memanggil Ollama{detail}") from exc
 
-    try:
-        data = response.json()
-        result = data.get("response", "")
-    except (TypeError, ValueError) as exc:
-        raise OllamaError("Format respons generate Ollama tidak valid.") from exc
+    with response:
+        try:
+            for raw_line in response.iter_lines(decode_unicode=True):
+                if not raw_line:
+                    continue
+
+                try:
+                    data = json.loads(raw_line)
+                except ValueError as exc:
+                    raise OllamaError("Format respons stream Ollama tidak valid.") from exc
+
+                fragment = data.get("response", "")
+                if isinstance(fragment, str) and fragment:
+                    yield fragment
+        finally:
+            response.close()
+
+
+def generate_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60) -> str:
+    result = "".join(stream_text(prompt, model, host=host, timeout=timeout))
 
     if not isinstance(result, str) or not result.strip():
         raise OllamaError("Ollama mengembalikan respons kosong.")
