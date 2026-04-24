@@ -35,17 +35,39 @@ def list_models(host: str = DEFAULT_OLLAMA_HOST) -> list[str]:
     return names
 
 
-def stream_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60):
-    if not prompt.strip():
-        raise OllamaError("Prompt tidak boleh kosong.")
+def stream_text(messages: list[dict[str, str]], model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60):
+    if not isinstance(messages, list):
+        raise OllamaError("Messages harus berupa list.")
+
+    if not isinstance(model, str):
+        raise OllamaError("Model Ollama harus berupa string.")
 
     if not model.strip():
         raise OllamaError("Model Ollama tidak boleh kosong.")
 
-    url = f"{host.rstrip('/')}/api/generate"
+    if not messages:
+        raise OllamaError("Messages tidak boleh kosong.")
+
+    normalized_messages: list[dict[str, str]] = []
+    for message in messages:
+        if not isinstance(message, dict):
+            raise OllamaError("Setiap message harus berupa dict.")
+
+        role = message.get("role")
+        content = message.get("content")
+
+        if not isinstance(role, str) or not role.strip():
+            raise OllamaError("Setiap message harus memiliki role string.")
+
+        if not isinstance(content, str) or not content.strip():
+            raise OllamaError("Setiap message harus memiliki content string.")
+
+        normalized_messages.append({"role": role, "content": content})
+
+    url = f"{host.rstrip('/')}/api/chat"
     payload = {
         "model": model,
-        "prompt": prompt,
+        "messages": normalized_messages,
         "stream": True,
     }
 
@@ -71,15 +93,16 @@ def stream_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeou
                 except ValueError as exc:
                     raise OllamaError("Format respons stream Ollama tidak valid.") from exc
 
-                fragment = data.get("response", "")
+                message = data.get("message", {})
+                fragment = message.get("content", "") if isinstance(message, dict) else ""
                 if isinstance(fragment, str) and fragment:
                     yield fragment
         finally:
             response.close()
 
 
-def generate_text(prompt: str, model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60) -> str:
-    result = "".join(stream_text(prompt, model, host=host, timeout=timeout))
+def generate_text(messages: list[dict[str, str]], model: str, host: str = DEFAULT_OLLAMA_HOST, timeout: int = 60) -> str:
+    result = "".join(stream_text(messages, model, host=host, timeout=timeout))
 
     if not isinstance(result, str) or not result.strip():
         raise OllamaError("Ollama mengembalikan respons kosong.")
